@@ -72,11 +72,11 @@
     <PreferenceCategory
             app:title="@string/plugin">
 
-        <com.github.shadowsocks.preference.PluginPreference
+        <!--<com.github.shadowsocks.preference.PluginPreference
                 app:key="plugin"
                 app:persistent="false"
                 app:title="@string/plugin"
-                app:useSimpleSummaryProvider="true"/>
+                app:useSimpleSummaryProvider="true"/>-->
         <EditTextPreference
                 app:key="plugin.configure"
                 app:icon="@drawable/ic_action_settings"

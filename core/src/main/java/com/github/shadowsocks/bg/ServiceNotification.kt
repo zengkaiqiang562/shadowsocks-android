@@ -73,7 +73,7 @@ class ServiceNotification(private val service: BaseService.Interface, profileNam
 
     private val builder = NotificationCompat.Builder(service as Context, channel)
             .setWhen(0)
-            .setColor(ContextCompat.getColor(service, R.color.material_primary_500))
+//            .setColor(ContextCompat.getColor(service, R.color.material_primary_500))
             .setTicker(service.getString(R.string.forward_success))
             .setContentTitle(profileName)
             .setContentIntent(Core.configureIntent(service))

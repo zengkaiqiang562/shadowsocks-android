@@ -41,7 +41,6 @@ import androidx.lifecycle.whenCreated
 import androidx.preference.*
 import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
-import com.github.shadowsocks.plugin.*
 import com.github.shadowsocks.plugin.fragment.AlertDialogFragment
 import com.github.shadowsocks.plugin.fragment.Empty
 import com.github.shadowsocks.plugin.fragment.showAllowingStateLoss
@@ -74,9 +73,9 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
 
     private var profileId = -1L
     private lateinit var isProxyApps: SwitchPreference
-    private lateinit var plugin: PluginPreference
+//    private lateinit var plugin: PluginPreference
     private lateinit var pluginConfigure: EditTextPreference
-    private lateinit var pluginConfiguration: PluginConfiguration
+//    private lateinit var pluginConfiguration: PluginConfiguration
     private lateinit var receiver: BroadcastReceiver
     private lateinit var udpFallback: Preference
 
@@ -108,12 +107,12 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         findPreference<Preference>(Key.metered)!!.apply {
             if (Build.VERSION.SDK_INT >= 28) isEnabled = serviceMode == Key.modeVpn else remove()
         }
-        plugin = findPreference(Key.plugin)!!
+//        plugin = findPreference(Key.plugin)!!
         pluginConfigure = findPreference(Key.pluginConfigure)!!
         pluginConfigure.setOnBindEditTextListener(EditTextPreferenceModifiers.Monospace)
         pluginConfigure.onPreferenceChangeListener = this
-        pluginConfiguration = PluginConfiguration(DataStore.plugin)
-        initPlugins()
+//        pluginConfiguration = PluginConfiguration(DataStore.plugin)
+//        initPlugins()
         udpFallback = findPreference(Key.udpFallback)!!
         DataStore.privateStore.registerChangeListener(this)
 
@@ -124,7 +123,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
             findPreference<Preference>(Key.password)!!.isEnabled = false
             findPreference<Preference>(Key.method)!!.isEnabled = false
             findPreference<Preference>(Key.remotePort)!!.isEnabled = false
-            plugin.isEnabled = false
+//            plugin.isEnabled = false
             pluginConfigure.isEnabled = false
             udpFallback.isEnabled = false
         }
@@ -133,22 +132,22 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         ViewCompat.setOnApplyWindowInsetsListener(listView, ListListener)
-        setFragmentResultListener(PluginPreferenceDialogFragment::class.java.name) { _, bundle ->
-            val selected = plugin.plugins.lookup.getValue(
-                bundle.getString(PluginPreferenceDialogFragment.KEY_SELECTED_ID)!!)
-            val override = pluginConfiguration.pluginsOptions.keys.firstOrNull {
-                plugin.plugins.lookup[it] == selected
-            }
-            pluginConfiguration = PluginConfiguration(pluginConfiguration.pluginsOptions, override ?: selected.id)
-            DataStore.plugin = pluginConfiguration.toString()
-            makeDirt()
-            plugin.value = pluginConfiguration.selected
-            pluginConfigure.isEnabled = selected !is NoPlugin
-            pluginConfigure.text = pluginConfiguration.getOptions().toString()
-            if (!selected.trusted) {
-                Snackbar.make(requireView(), R.string.plugin_untrusted, Snackbar.LENGTH_LONG).show()
-            }
-        }
+//        setFragmentResultListener(PluginPreferenceDialogFragment::class.java.name) { _, bundle ->
+//            val selected = plugin.plugins.lookup.getValue(
+//                bundle.getString(PluginPreferenceDialogFragment.KEY_SELECTED_ID)!!)
+//            val override = pluginConfiguration.pluginsOptions.keys.firstOrNull {
+//                plugin.plugins.lookup[it] == selected
+//            }
+//            pluginConfiguration = PluginConfiguration(pluginConfiguration.pluginsOptions, override ?: selected.id)
+//            DataStore.plugin = pluginConfiguration.toString()
+//            makeDirt()
+//            plugin.value = pluginConfiguration.selected
+//            pluginConfigure.isEnabled = selected !is NoPlugin
+//            pluginConfigure.text = pluginConfiguration.getOptions().toString()
+//            if (!selected.trusted) {
+//                Snackbar.make(requireView(), R.string.plugin_untrusted, Snackbar.LENGTH_LONG).show()
+//            }
+//        }
         AlertDialogFragment.setResultListener<ProfileConfigActivity.UnsavedChangesDialogFragment, Empty>(this) {
                 which, _ ->
             when (which) {
@@ -158,19 +157,19 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         }
     }
 
-    private fun initPlugins() {
-        plugin.value = pluginConfiguration.selected
-        plugin.init()
-        pluginConfigure.isEnabled = plugin.selectedEntry?.let { it is NoPlugin } == false
-        pluginConfigure.text = pluginConfiguration.getOptions().toString()
-    }
+//    private fun initPlugins() {
+//        plugin.value = pluginConfiguration.selected
+//        plugin.init()
+//        pluginConfigure.isEnabled = plugin.selectedEntry?.let { it is NoPlugin } == false
+//        pluginConfigure.text = pluginConfiguration.getOptions().toString()
+//    }
 
-    private fun showPluginEditor() {
-        PluginConfigurationDialogFragment().apply {
-            setArg(Key.pluginConfigure, pluginConfiguration.selected)
-            setTargetFragment(this@ProfileConfigFragment, 0)
-        }.showAllowingStateLoss(parentFragmentManager, Key.pluginConfigure)
-    }
+//    private fun showPluginEditor() {
+//        PluginConfigurationDialogFragment().apply {
+//            setArg(Key.pluginConfigure, pluginConfiguration.selected)
+//            setTargetFragment(this@ProfileConfigFragment, 0)
+//        }.showAllowingStateLoss(parentFragmentManager, Key.pluginConfigure)
+//    }
 
     private fun saveAndExit() {
         val profile = ProfileManager.getProfile(profileId) ?: Profile()
@@ -186,7 +185,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         super.onAttach(context)
         receiver = context.listenForPackageChanges(false) {
             lifecycleScope.launch(Dispatchers.Main) {   // wait until changes were flushed
-                whenCreated { initPlugins() }
+                whenCreated { /*initPlugins()*/ }
             }
         }
     }
@@ -200,10 +199,10 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean = try {
-        val selected = pluginConfiguration.selected
-        pluginConfiguration = PluginConfiguration(pluginConfiguration.pluginsOptions +
-                (pluginConfiguration.selected to PluginOptions(selected, newValue as? String?)), selected)
-        DataStore.plugin = pluginConfiguration.toString()
+//        val selected = pluginConfiguration.selected
+//        pluginConfiguration = PluginConfiguration(pluginConfiguration.pluginsOptions +
+//                (pluginConfiguration.selected to PluginOptions(selected, newValue as? String?)), selected)
+//        DataStore.plugin = pluginConfiguration.toString()
         makeDirt()
         true
     } catch (exc: RuntimeException) {
@@ -217,32 +216,32 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
         when (preference.key) {
-            Key.plugin -> PluginPreferenceDialogFragment().apply {
-                setArg(Key.plugin)
-                setTargetFragment(this@ProfileConfigFragment, 0)
-            }.showAllowingStateLoss(parentFragmentManager, Key.plugin)
-            Key.pluginConfigure -> {
-                val intent = PluginManager.buildIntent(plugin.selectedEntry!!.id, PluginContract.ACTION_CONFIGURE)
-                if (intent.resolveActivity(requireContext().packageManager) == null) showPluginEditor() else {
-                    configurePlugin.launch(intent
-                            .putExtra(PluginContract.EXTRA_OPTIONS, pluginConfiguration.getOptions().toString()))
-                }
-            }
+//            Key.plugin -> PluginPreferenceDialogFragment().apply {
+//                setArg(Key.plugin)
+//                setTargetFragment(this@ProfileConfigFragment, 0)
+//            }.showAllowingStateLoss(parentFragmentManager, Key.plugin)
+//            Key.pluginConfigure -> {
+//                val intent = PluginManager.buildIntent(plugin.selectedEntry!!.id, PluginContract.ACTION_CONFIGURE)
+//                if (intent.resolveActivity(requireContext().packageManager) == null) showPluginEditor() else {
+//                    configurePlugin.launch(intent
+//                            .putExtra(PluginContract.EXTRA_OPTIONS, pluginConfiguration.getOptions().toString()))
+//                }
+//            }
             else -> super.onDisplayPreferenceDialog(preference)
         }
     }
 
-    private val configurePlugin = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        (resultCode, data) ->
-        when (resultCode) {
-            Activity.RESULT_OK -> {
-                val options = data?.getStringExtra(PluginContract.EXTRA_OPTIONS)
-                pluginConfigure.text = options
-                onPreferenceChange(pluginConfigure, options)
-            }
-            PluginContract.RESULT_FALLBACK -> showPluginEditor()
-        }
-    }
+//    private val configurePlugin = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//        (resultCode, data) ->
+//        when (resultCode) {
+//            Activity.RESULT_OK -> {
+//                val options = data?.getStringExtra(PluginContract.EXTRA_OPTIONS)
+//                pluginConfigure.text = options
+//                onPreferenceChange(pluginConfigure, options)
+//            }
+//            PluginContract.RESULT_FALLBACK -> showPluginEditor()
+//        }
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_delete -> {

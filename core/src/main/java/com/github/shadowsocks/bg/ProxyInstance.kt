@@ -27,8 +27,8 @@ import com.github.shadowsocks.acl.Acl
 import com.github.shadowsocks.acl.AclSyncer
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.database.Profile
-import com.github.shadowsocks.plugin.PluginConfiguration
-import com.github.shadowsocks.plugin.PluginManager
+//import com.github.shadowsocks.plugin.PluginConfiguration
+//import com.github.shadowsocks.plugin.PluginManager
 import com.github.shadowsocks.preference.DataStore
 import kotlinx.coroutines.CoroutineScope
 import org.json.JSONArray
@@ -65,7 +65,7 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
 
     private var configFile: File? = null
     var trafficMonitor: TrafficMonitor? = null
-    val plugin by lazy { PluginManager.init(PluginConfiguration(profile.plugin ?: "")) }
+//    val plugin by lazy { PluginManager.init(PluginConfiguration(profile.plugin ?: "")) }
 
     /**
      * Sensitive shadowsocks configuration file requires extra protection. It may be stored in encrypted storage or
@@ -78,12 +78,12 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         // init JSON config
         this.configFile = configFile
         val config = profile.toJson()
-        plugin?.let { (path, opts, isV2) ->
-            if (service.isVpnService) {
-                if (isV2) opts["__android_vpn"] = "" else config.put("plugin_args", JSONArray(arrayOf("-V")))
-            }
-            config.put("plugin", path).put("plugin_opts", opts.toString())
-        }
+//        plugin?.let { (path, opts, isV2) ->
+//            if (service.isVpnService) {
+//                if (isV2) opts["__android_vpn"] = "" else config.put("plugin_args", JSONArray(arrayOf("-V")))
+//            }
+//            config.put("plugin", path).put("plugin_opts", opts.toString())
+//        }
         config.put("dns", "system")
         config.put("locals", JSONArray().apply {
             // local SOCKS5 proxy

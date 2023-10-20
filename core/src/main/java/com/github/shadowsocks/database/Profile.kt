@@ -27,8 +27,8 @@ import android.util.Base64
 import android.util.LongSparseArray
 import androidx.core.net.toUri
 import androidx.room.*
-import com.github.shadowsocks.plugin.PluginConfiguration
-import com.github.shadowsocks.plugin.PluginOptions
+//import com.github.shadowsocks.plugin.PluginConfiguration
+//import com.github.shadowsocks.plugin.PluginOptions
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.parsePort
@@ -189,10 +189,10 @@ data class Profile(
                     it.method = method
                 }.apply {
                     feature?.copyFeatureSettingsTo(this)
-                    val id = json["plugin"].optString
-                    if (!id.isNullOrEmpty()) {
-                        plugin = PluginOptions(id, json["plugin_opts"].optString).toString(false)
-                    }
+//                    val id = json["plugin"].optString
+//                    if (!id.isNullOrEmpty()) {
+//                        plugin = PluginOptions(id, json["plugin_opts"].optString).toString(false)
+//                    }
                     name = json["remarks"].optString
                     route = json["route"].optString ?: route
                     if (fallback) return@apply
@@ -298,10 +298,10 @@ data class Profile(
         val builder = Uri.Builder()
                 .scheme("ss")
                 .encodedAuthority("$auth@$wrappedHost:$remotePort")
-        val configuration = PluginConfiguration(plugin ?: "")
-        if (configuration.selected.isNotEmpty()) {
-            builder.appendQueryParameter(Key.plugin, configuration.getOptions().toString(false))
-        }
+//        val configuration = PluginConfiguration(plugin ?: "")
+//        if (configuration.selected.isNotEmpty()) {
+//            builder.appendQueryParameter(Key.plugin, configuration.getOptions().toString(false))
+//        }
         if (!name.isNullOrEmpty()) builder.fragment(name)
         return builder.build()
     }
@@ -314,12 +314,12 @@ data class Profile(
         put("password", password)
         put("method", method)
         if (profiles == null) return@apply
-        PluginConfiguration(plugin ?: "").getOptions().also {
-            if (it.id.isNotEmpty()) {
-                put("plugin", it.id)
-                put("plugin_opts", it.toString())
-            }
-        }
+//        PluginConfiguration(plugin ?: "").getOptions().also {
+//            if (it.id.isNotEmpty()) {
+//                put("plugin", it.id)
+//                put("plugin_opts", it.toString())
+//            }
+//        }
         put("remarks", name)
         put("route", route)
         put("remote_dns", remoteDns)

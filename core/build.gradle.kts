@@ -88,7 +88,12 @@ dependencies {
     val roomVersion = "2.5.0"
     val workVersion = "2.7.1"
 
-    api(project(":plugin"))
+//    api(project(":plugin"))
+    implementation(kotlin("stdlib-jdk8"))
+//    api("androidx.core:core-ktx:1.7.0")
+//    api("androidx.fragment:fragment-ktx:1.5.5")
+//    api("com.google.android.material:material:1.6.0")
+
     api("androidx.core:core-ktx:1.9.0")
     api("com.google.android.material:material:1.8.0")
 

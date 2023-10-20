@@ -32,7 +32,7 @@ import androidx.leanback.preference.LeanbackListPreferenceDialogFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.database.ProfileManager
-import com.github.shadowsocks.plugin.PluginConfiguration
+//import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.preference.DataStore
 
 class ProfilesDialogFragment : LeanbackListPreferenceDialogFragmentCompat() {
@@ -65,8 +65,8 @@ class ProfilesDialogFragment : LeanbackListPreferenceDialogFragmentCompat() {
             holder.titleView.text = profile.formattedName
             holder.itemView.findViewById<TextView>(android.R.id.summary).text = ArrayList<String>().apply {
                 if (!profile.name.isNullOrEmpty()) this += profile.formattedAddress
-                val id = PluginConfiguration(profile.plugin ?: "").selected
-                if (id.isNotEmpty()) this += getString(R.string.profile_plugin, id)
+//                val id = PluginConfiguration(profile.plugin ?: "").selected
+//                if (id.isNotEmpty()) this += getString(R.string.profile_plugin, id)
                 if (profile.tx > 0 || profile.rx > 0) this += getString(R.string.traffic,
                         Formatter.formatFileSize(activity, profile.tx), Formatter.formatFileSize(activity, profile.rx))
             }.joinToString("\n")

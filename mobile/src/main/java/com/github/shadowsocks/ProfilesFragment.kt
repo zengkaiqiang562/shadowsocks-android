@@ -47,7 +47,7 @@ import com.github.shadowsocks.aidl.TrafficStats
 import com.github.shadowsocks.bg.BaseService
 import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.database.ProfileManager
-import com.github.shadowsocks.plugin.PluginConfiguration
+//import com.github.shadowsocks.plugin.PluginConfiguration
 import com.github.shadowsocks.plugin.fragment.showAllowingStateLoss
 import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Action
@@ -164,8 +164,8 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener, Sea
             text1.text = item.formattedName
             text2.text = ArrayList<String>().apply {
                 if (!item.name.isNullOrEmpty()) this += item.formattedAddress
-                val id = PluginConfiguration(item.plugin ?: "").selected
-                if (id.isNotEmpty()) this += getString(R.string.profile_plugin, id)
+//                val id = PluginConfiguration(item.plugin ?: "").selected
+//                if (id.isNotEmpty()) this += getString(R.string.profile_plugin, id)
             }.joinToString("\n")
             val context = requireContext()
             traffic.text = if (tx <= 0 && rx <= 0) null else getString(R.string.traffic,
