@@ -76,8 +76,8 @@ class ServiceNotification(private val service: BaseService.Interface, profileNam
 //            .setColor(ContextCompat.getColor(service, R.color.material_primary_500))
             .setTicker(service.getString(R.string.forward_success))
             .setContentTitle(profileName)
-            .setContentIntent(Core.configureIntent(service))
-            .setSmallIcon(R.drawable.ic_service_active)
+//            .setContentIntent(Core.configureIntent(service))
+            .setSmallIcon(R.drawable.ic_service_active) // TODO 需要更换 logo
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .setPriority(if (visible) NotificationCompat.PRIORITY_LOW else NotificationCompat.PRIORITY_MIN)
 

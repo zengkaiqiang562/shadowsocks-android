@@ -62,7 +62,7 @@ import kotlin.reflect.KClass
 object Core : Configuration.Provider {
     lateinit var app: Application
         @VisibleForTesting set
-    lateinit var configureIntent: (Context) -> PendingIntent
+//    lateinit var configureIntent: (Context) -> PendingIntent
     val activity by lazy { app.getSystemService<ActivityManager>()!! }
     val clipboard by lazy { app.getSystemService<ClipboardManager>()!! }
     val connectivity by lazy { app.getSystemService<ConnectivityManager>()!! }
@@ -93,12 +93,12 @@ object Core : Configuration.Provider {
 //        return result
 //    }
 
-    fun init(app: Application, configureClass: KClass<out Any>) {
+    fun init(app: Application/*, configureClass: KClass<out Any>*/) {
         this.app = app
-        this.configureIntent = {
-            PendingIntent.getActivity(it, 0, Intent(it, configureClass.java)
-                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), PendingIntent.FLAG_IMMUTABLE)
-        }
+//        this.configureIntent = {
+//            PendingIntent.getActivity(it, 0, Intent(it, configureClass.java)
+//                    .setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT), PendingIntent.FLAG_IMMUTABLE)
+//        }
 
         if (Build.VERSION.SDK_INT >= 24) {  // migrate old files
             deviceStorage.moveDatabaseFrom(app, Key.DB_PUBLIC)
@@ -155,11 +155,11 @@ object Core : Configuration.Provider {
             notification.createNotificationChannels(listOf(
                     NotificationChannel("service-vpn", app.getText(R.string.service_vpn),
                             if (Build.VERSION.SDK_INT >= 28) NotificationManager.IMPORTANCE_MIN
-                            else NotificationManager.IMPORTANCE_LOW),   // #1355
+                            else NotificationManager.IMPORTANCE_LOW)/*,   // #1355
                     NotificationChannel("service-proxy", app.getText(R.string.service_proxy),
                             NotificationManager.IMPORTANCE_LOW),
                     NotificationChannel("service-transproxy", app.getText(R.string.service_transproxy),
-                            NotificationManager.IMPORTANCE_LOW)/*,
+                            NotificationManager.IMPORTANCE_LOW),
                     SubscriptionService.notificationChannel*/))
             notification.deleteNotificationChannel("service-nat")   // NAT mode is gone for good
         }

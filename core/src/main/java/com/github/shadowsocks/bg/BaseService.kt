@@ -284,8 +284,8 @@ object BaseService {
                         data.closeReceiverRegistered = false
                     }
 
-                    data.notification?.destroy()
-                    data.notification = null
+//                    data.notification?.destroy()
+//                    data.notification = null
 
                     val ids = listOfNotNull(data.proxy, data.udpFallback).map {
                         it.shutdown(this)

@@ -162,7 +162,7 @@ class VpnService : BaseVpnService(), BaseService.Interface {
     private suspend fun startVpn(): FileDescriptor {
         val profile = data.proxy!!.profile
         val builder = Builder()
-                .setConfigureIntent(Core.configureIntent(this))
+//                .setConfigureIntent(Core.configureIntent(this)) // 注释掉可以隐藏 在点击通知栏后 所弹出的 Dialog 中的配置按钮
                 .setSession(profile.formattedName)
                 .setMtu(VPN_MTU)
                 .addAddress(PRIVATE_VLAN4_CLIENT, 30)
