@@ -12,8 +12,6 @@ import org.gradle.kotlin.dsl.getByName
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import java.util.*
 
-const val lifecycleVersion = "2.5.1"
-
 private val Project.android get() = extensions.getByName<BaseExtension>("android")
 private val BaseExtension.lint get() = (this as CommonExtension<*, *, *, *>).lint
 

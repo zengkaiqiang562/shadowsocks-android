@@ -27,10 +27,10 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.RemoteException
 import com.github.shadowsocks.bg.BaseService
-import com.github.shadowsocks.bg.ProxyService
-import com.github.shadowsocks.bg.TransproxyService
+//import com.github.shadowsocks.bg.ProxyService
+//import com.github.shadowsocks.bg.TransproxyService
 import com.github.shadowsocks.bg.VpnService
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Action
 import com.github.shadowsocks.utils.Key
 import kotlinx.coroutines.Dispatchers
@@ -42,12 +42,13 @@ import kotlinx.coroutines.launch
  */
 class ShadowsocksConnection(private var listenForDeath: Boolean = false) : ServiceConnection, IBinder.DeathRecipient {
     companion object {
-        val serviceClass get() = when (DataStore.serviceMode) {
-            Key.modeProxy -> ProxyService::class
-            Key.modeVpn -> VpnService::class
-            Key.modeTransproxy -> TransproxyService::class
-            else -> throw UnknownError()
-        }.java
+//        val serviceClass get() = when (DataStore.serviceMode) {
+//            Key.modeProxy -> ProxyService::class
+//            Key.modeVpn -> VpnService::class
+//            Key.modeTransproxy -> TransproxyService::class
+//            else -> throw UnknownError()
+//        }.java
+        val serviceClass get() = VpnService::class.java
     }
 
     interface Callback {

@@ -23,10 +23,11 @@ package com.github.shadowsocks.bg
 import android.net.LocalSocket
 import android.os.SystemClock
 import com.github.shadowsocks.aidl.TrafficStats
-import com.github.shadowsocks.database.ProfileManager
+import com.github.shadowsocks.database.Profile
+//import com.github.shadowsocks.database.ProfileManager
 import com.github.shadowsocks.net.LocalSocketListener
-import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.utils.DirectBoot
+//import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.utils.DirectBoot
 import java.io.File
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -88,24 +89,26 @@ class TrafficMonitor(statFile: File) {
         return Pair(out, updated)
     }
 
-    fun persistStats(id: Long) {
+//    fun persistStats(id: Long) {
+    fun persistStats(profile: Profile) {
         val current = current
         check(persisted == null || persisted == current) { "Data loss occurred" }
         persisted = current
         try {
             // profile may have host, etc. modified and thus a re-fetch is necessary (possible race condition)
-            val profile = ProfileManager.getProfile(id) ?: return
+//            val profile = ProfileManager.getProfile(id) ?: return
             profile.tx += current.txTotal
             profile.rx += current.rxTotal
-            ProfileManager.updateProfile(profile)
+//            ProfileManager.updateProfile(profile)
         } catch (e: IOException) {
-            if (!DataStore.directBootAware) throw e // we should only reach here because we're in direct boot
-            val profile = DirectBoot.getDeviceProfile()!!.toList().single { it.id == id }
-            profile.tx += current.txTotal
-            profile.rx += current.rxTotal
-            profile.dirty = true
-            DirectBoot.update(profile)
-            DirectBoot.listenForUnlock()
+            e.printStackTrace()
+//            if (!DataStore.directBootAware) throw e // we should only reach here because we're in direct boot
+//            val profile = DirectBoot.getDeviceProfile()!!.toList().single { it.id == id }
+//            profile.tx += current.txTotal
+//            profile.rx += current.rxTotal
+//            profile.dirty = true
+//            DirectBoot.update(profile)
+//            DirectBoot.listenForUnlock()
         }
     }
 }

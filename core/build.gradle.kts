@@ -84,33 +84,31 @@ tasks.register<Exec>("cargoClean") {
 tasks.clean.dependsOn("cargoClean")
 
 dependencies {
-    val coroutinesVersion = "1.6.4"
-    val roomVersion = "2.5.0"
-    val workVersion = "2.7.1"
 
 //    api(project(":plugin"))
+//    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10")
     implementation(kotlin("stdlib-jdk8"))
 //    api("androidx.core:core-ktx:1.7.0")
-//    api("androidx.fragment:fragment-ktx:1.5.5")
+//    api("androidx.fragment:fragment-ktx:1.6.1")
 //    api("com.google.android.material:material:1.6.0")
 
-    api("androidx.core:core-ktx:1.9.0")
-    api("com.google.android.material:material:1.8.0")
+    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("com.google.android.material:material:1.8.0")
 
-    api("androidx.lifecycle:lifecycle-livedata-core-ktx:$lifecycleVersion")
-    api("androidx.preference:preference:1.2.0")
-    api("androidx.room:room-runtime:$roomVersion")
-    api("androidx.work:work-multiprocess:$workVersion")
-    api("androidx.work:work-runtime-ktx:$workVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.5.1")
+//    api("androidx.preference:preference:1.2.0")
+//    api("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.work:work-multiprocess:2.8.1")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 //    api("com.google.android.gms:play-services-oss-licenses:17.0.0")
-    api("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.10.1")
 //    api("com.google.firebase:firebase-analytics-ktx:21.2.0")
 //    api("com.google.firebase:firebase-crashlytics:18.3.3")
-    api("com.jakewharton.timber:timber:5.0.1")
-    api("dnsjava:dnsjava:3.5.2")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation("dnsjava:dnsjava:3.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 //    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutinesVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
-    androidTestImplementation("androidx.room:room-testing:$roomVersion")
+//    kapt("androidx.room:room-compiler:$roomVersion")
+//    androidTestImplementation("androidx.room:room-testing:$roomVersion")
     androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5")
 }

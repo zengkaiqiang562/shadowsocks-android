@@ -34,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 //import com.github.shadowsocks.plugin.PluginContract
 import com.github.shadowsocks.plugin.fragment.AlertDialogFragment
 import com.github.shadowsocks.plugin.fragment.Empty
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.widget.ListHolderListener
 
 class ProfileConfigActivity : AppCompatActivity() {
@@ -48,11 +48,11 @@ class ProfileConfigActivity : AppCompatActivity() {
     }
 
     private val child by lazy { supportFragmentManager.findFragmentById(R.id.content) as ProfileConfigFragment }
-    val unsavedChangesHandler = object : OnBackPressedCallback(DataStore.dirty) {
-        override fun handleOnBackPressed() = UnsavedChangesDialogFragment().apply {
-            key()
-        }.show(supportFragmentManager, null)
-    }
+//    val unsavedChangesHandler = object : OnBackPressedCallback(DataStore.dirty) {
+//        override fun handleOnBackPressed() = UnsavedChangesDialogFragment().apply {
+//            key()
+//        }.show(supportFragmentManager, null)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,12 +63,12 @@ class ProfileConfigActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_navigation_close)
         }
-        onBackPressedDispatcher.addCallback(unsavedChangesHandler)
+//        onBackPressedDispatcher.addCallback(unsavedChangesHandler)
     }
 
     override fun onResume() {
         super.onResume()
-        unsavedChangesHandler.isEnabled = DataStore.dirty
+//        unsavedChangesHandler.isEnabled = DataStore.dirty
     }
 
     override fun onSupportNavigateUp(): Boolean {

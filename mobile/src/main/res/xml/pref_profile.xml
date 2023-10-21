@@ -83,14 +83,14 @@
                 app:persistent="false"
                 app:title="@string/plugin_configure"
                 app:useSimpleSummaryProvider="true"/>
-        <Preference
+        <!--<Preference
                 app:key="udpFallback"
                 app:icon="@drawable/ic_maps_360"
                 app:title="@string/udp_fallback"
                 app:summary="@string/plugin_disabled">
             <intent android:targetPackage="com.github.shadowsocks"
                     android:targetClass="com.github.shadowsocks.UdpFallbackProfileActivity"/>
-        </Preference>
+        </Preference>-->
 
     </PreferenceCategory>
 

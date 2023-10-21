@@ -44,9 +44,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.shadowsocks.Core.app
-import com.github.shadowsocks.database.ProfileManager
-import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.utils.DirectBoot
+//import com.github.shadowsocks.database.ProfileManager
+//import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.utils.DirectBoot
 import com.github.shadowsocks.utils.listenForPackageChanges
 import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.ListListener
@@ -119,8 +119,8 @@ class AppManager : AppCompatActivity() {
 
         override fun onClick(v: View?) {
             if (isProxiedApp(item)) proxiedUids.delete(item.uid) else proxiedUids[item.uid] = true
-            DataStore.individual = apps.filter { isProxiedApp(it) }.joinToString("\n") { it.packageName }
-            DataStore.dirty = true
+//            DataStore.individual = apps.filter { isProxiedApp(it) }.joinToString("\n") { it.packageName }
+//            DataStore.dirty = true
 
             appsAdapter.notifyItemRangeChanged(0, appsAdapter.itemCount, SWITCH)
         }
@@ -197,11 +197,11 @@ class AppManager : AppCompatActivity() {
         }).duration = shortAnimTime
     }
 
-    private fun initProxiedUids(str: String = DataStore.individual) {
-        proxiedUids.clear()
-        val apps = getCachedApps(packageManager)
-        for (line in str.lineSequence()) proxiedUids[(apps[line] ?: continue).applicationInfo.uid] = true
-    }
+//    private fun initProxiedUids(str: String = DataStore.individual) {
+//        proxiedUids.clear()
+//        val apps = getCachedApps(packageManager)
+//        for (line in str.lineSequence()) proxiedUids[(apps[line] ?: continue).applicationInfo.uid] = true
+//    }
 
     private fun isProxiedApp(app: ProxiedApp) = proxiedUids[app.uid]
 
@@ -225,26 +225,26 @@ class AppManager : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        if (!DataStore.proxyApps) {
-            DataStore.proxyApps = true
-            DataStore.dirty = true
-        }
+//        if (!DataStore.proxyApps) {
+//            DataStore.proxyApps = true
+//            DataStore.dirty = true
+//        }
+//
+//        bypassGroup = findViewById(R.id.bypassGroup)
+//        bypassGroup.check(if (DataStore.bypass) R.id.btn_bypass else R.id.btn_on)
+//        bypassGroup.setOnCheckedChangeListener { _, checkedId ->
+//            DataStore.dirty = true
+//            when (checkedId) {
+//                R.id.btn_off -> {
+//                    DataStore.proxyApps = false
+//                    finish()
+//                }
+//                R.id.btn_on -> DataStore.bypass = false
+//                R.id.btn_bypass -> DataStore.bypass = true
+//            }
+//        }
 
-        bypassGroup = findViewById(R.id.bypassGroup)
-        bypassGroup.check(if (DataStore.bypass) R.id.btn_bypass else R.id.btn_on)
-        bypassGroup.setOnCheckedChangeListener { _, checkedId ->
-            DataStore.dirty = true
-            when (checkedId) {
-                R.id.btn_off -> {
-                    DataStore.proxyApps = false
-                    finish()
-                }
-                R.id.btn_on -> DataStore.bypass = false
-                R.id.btn_bypass -> DataStore.bypass = true
-            }
-        }
-
-        initProxiedUids()
+//        initProxiedUids()
         list = findViewById(R.id.list)
         ViewCompat.setOnApplyWindowInsetsListener(list, ListListener)
         list.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
@@ -268,27 +268,27 @@ class AppManager : AppCompatActivity() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_apply_all -> {
-                val profiles = ProfileManager.getAllProfiles()
-                if (profiles != null) {
-                    val proxiedAppString = DataStore.individual
-                    profiles.forEach {
-                        it.individual = proxiedAppString
-                        it.bypass = DataStore.bypass
-                        ProfileManager.updateProfile(it)
-                    }
-                    if (DataStore.directBootAware) DirectBoot.update()
-                    Snackbar.make(list, R.string.action_apply_all, Snackbar.LENGTH_LONG).show()
-                } else Snackbar.make(list, R.string.action_export_err, Snackbar.LENGTH_LONG).show()
-                return true
-            }
-            R.id.action_export_clipboard -> {
-                val success = Core.trySetPrimaryClip("${DataStore.bypass}\n${DataStore.individual}")
-                Snackbar.make(list,
-                        if (success) R.string.action_export_msg else R.string.action_export_err,
-                        Snackbar.LENGTH_LONG).show()
-                return true
-            }
+//            R.id.action_apply_all -> {
+//                val profiles = ProfileManager.getAllProfiles()
+//                if (profiles != null) {
+//                    val proxiedAppString = DataStore.individual
+//                    profiles.forEach {
+//                        it.individual = proxiedAppString
+//                        it.bypass = DataStore.bypass
+//                        ProfileManager.updateProfile(it)
+//                    }
+//                    if (DataStore.directBootAware) DirectBoot.update()
+//                    Snackbar.make(list, R.string.action_apply_all, Snackbar.LENGTH_LONG).show()
+//                } else Snackbar.make(list, R.string.action_export_err, Snackbar.LENGTH_LONG).show()
+//                return true
+//            }
+//            R.id.action_export_clipboard -> {
+//                val success = Core.trySetPrimaryClip("${DataStore.bypass}\n${DataStore.individual}")
+//                Snackbar.make(list,
+//                        if (success) R.string.action_export_msg else R.string.action_export_err,
+//                        Snackbar.LENGTH_LONG).show()
+//                return true
+//            }
             R.id.action_import_clipboard -> {
                 val proxiedAppString = Core.clipboard.primaryClip?.getItemAt(0)?.text?.toString()
                 if (!proxiedAppString.isNullOrEmpty()) {
@@ -298,10 +298,10 @@ class AppManager : AppCompatActivity() {
                             proxiedAppString to ""
                         } else proxiedAppString.substring(0, i) to proxiedAppString.substring(i + 1)
                         bypassGroup.check(if (enabled.toBoolean()) R.id.btn_bypass else R.id.btn_on)
-                        DataStore.individual = apps
-                        DataStore.dirty = true
+//                        DataStore.individual = apps
+//                        DataStore.dirty = true
                         Snackbar.make(list, R.string.action_import_msg, Snackbar.LENGTH_LONG).show()
-                        initProxiedUids(apps)
+//                        initProxiedUids(apps)
                         appsAdapter.notifyItemRangeChanged(0, appsAdapter.itemCount, SWITCH)
                         return true
                     } catch (_: IllegalArgumentException) { }

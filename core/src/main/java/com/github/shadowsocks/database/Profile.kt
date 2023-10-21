@@ -26,10 +26,10 @@ import android.os.Parcelable
 import android.util.Base64
 import android.util.LongSparseArray
 import androidx.core.net.toUri
-import androidx.room.*
+//import androidx.room.*
 //import com.github.shadowsocks.plugin.PluginConfiguration
 //import com.github.shadowsocks.plugin.PluginOptions
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.parsePort
 import com.google.gson.JsonArray
@@ -45,10 +45,10 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.util.*
 
-@Entity
+//@Entity
 @Parcelize
 data class Profile(
-        @PrimaryKey(autoGenerate = true)
+//        @PrimaryKey(autoGenerate = true)
         var id: Long = 0,
 
         // user configurable fields
@@ -72,34 +72,37 @@ data class Profile(
         var udpFallback: Long? = null,
 
         // managed fields
-        var subscription: SubscriptionStatus = SubscriptionStatus.UserConfigured,
+//        var subscription: SubscriptionStatus = SubscriptionStatus.UserConfigured,
         var tx: Long = 0,
         var rx: Long = 0,
         var userOrder: Long = 0,
 
-        @Ignore // not persisted in db, only used by direct boot
+//        @Ignore // not persisted in db, only used by direct boot
         var dirty: Boolean = false
 ) : Parcelable, Serializable {
-    enum class SubscriptionStatus(val persistedValue: Int) {
-        UserConfigured(0),
-        Active(1),
-        /**
-         * This profile is no longer present in subscriptions.
-         */
-        Obsolete(2),
-        ;
-
-        companion object {
-            @JvmStatic
-            @TypeConverter
-            fun of(value: Int) = values().single { it.persistedValue == value }
-            @JvmStatic
-            @TypeConverter
-            fun toInt(status: SubscriptionStatus) = status.persistedValue
-        }
-    }
+//    enum class SubscriptionStatus(val persistedValue: Int) {
+//        UserConfigured(0),
+//        Active(1),
+//        /**
+//         * This profile is no longer present in subscriptions.
+//         */
+//        Obsolete(2),
+//        ;
+//
+//        companion object {
+//            @JvmStatic
+//            @TypeConverter
+//            fun of(value: Int) = values().single { it.persistedValue == value }
+//            @JvmStatic
+//            @TypeConverter
+//            fun toInt(status: SubscriptionStatus) = status.persistedValue
+//        }
+//    }
 
     companion object {
+
+        val defProfile = Profile(host = "test.umolewe.top", remotePort = 3834, password = "4CIf4", method = "aes-192-ctr")
+
         private const val serialVersionUID = 1L
         private val pattern =
                 """(?i)ss://[-a-zA-Z0-9+&@#/%?=.~*'()|!:,;_\[\]]*[-a-zA-Z0-9+&@#/%=.~*'()|\[\]]""".toRegex()
@@ -159,124 +162,124 @@ data class Profile(
             }
         }.filterNotNull()
 
-        private class JsonParser(private val feature: Profile? = null) : ArrayList<Profile>() {
-            val fallbackMap = mutableMapOf<Profile, Profile>()
+//        private class JsonParser(private val feature: Profile? = null) : ArrayList<Profile>() {
+//            val fallbackMap = mutableMapOf<Profile, Profile>()
+//
+//            private val JsonElement?.optString get() = (this as? JsonPrimitive)?.asString
+//            private val JsonElement?.optBoolean
+//                get() = // asBoolean attempts to cast everything to boolean
+//                    (this as? JsonPrimitive)?.run { if (isBoolean) asBoolean else null }
+//            private val JsonElement?.optInt
+//                get() = try {
+//                    (this as? JsonPrimitive)?.asInt
+//                } catch (_: NumberFormatException) {
+//                    null
+//                }
 
-            private val JsonElement?.optString get() = (this as? JsonPrimitive)?.asString
-            private val JsonElement?.optBoolean
-                get() = // asBoolean attempts to cast everything to boolean
-                    (this as? JsonPrimitive)?.run { if (isBoolean) asBoolean else null }
-            private val JsonElement?.optInt
-                get() = try {
-                    (this as? JsonPrimitive)?.asInt
-                } catch (_: NumberFormatException) {
-                    null
-                }
-
-            private fun tryParse(json: JsonObject, fallback: Boolean = false): Profile? {
-                val host = json["server"].optString
-                if (host.isNullOrEmpty()) return null
-                val remotePort = json["server_port"]?.optInt
-                if (remotePort == null || remotePort <= 0) return null
-                val password = json["password"].optString
-                if (password.isNullOrEmpty()) return null
-                val method = json["method"].optString
-                if (method.isNullOrEmpty()) return null
-                return Profile().also {
-                    it.host = host
-                    it.remotePort = remotePort
-                    it.password = password
-                    it.method = method
-                }.apply {
-                    feature?.copyFeatureSettingsTo(this)
-//                    val id = json["plugin"].optString
-//                    if (!id.isNullOrEmpty()) {
-//                        plugin = PluginOptions(id, json["plugin_opts"].optString).toString(false)
+//            private fun tryParse(json: JsonObject, fallback: Boolean = false): Profile? {
+//                val host = json["server"].optString
+//                if (host.isNullOrEmpty()) return null
+//                val remotePort = json["server_port"]?.optInt
+//                if (remotePort == null || remotePort <= 0) return null
+//                val password = json["password"].optString
+//                if (password.isNullOrEmpty()) return null
+//                val method = json["method"].optString
+//                if (method.isNullOrEmpty()) return null
+//                return Profile().also {
+//                    it.host = host
+//                    it.remotePort = remotePort
+//                    it.password = password
+//                    it.method = method
+//                }.apply {
+//                    feature?.copyFeatureSettingsTo(this)
+////                    val id = json["plugin"].optString
+////                    if (!id.isNullOrEmpty()) {
+////                        plugin = PluginOptions(id, json["plugin_opts"].optString).toString(false)
+////                    }
+//                    name = json["remarks"].optString
+//                    route = json["route"].optString ?: route
+//                    if (fallback) return@apply
+//                    remoteDns = json["remote_dns"].optString ?: remoteDns
+//                    ipv6 = json["ipv6"].optBoolean ?: ipv6
+//                    metered = json["metered"].optBoolean ?: metered
+//                    (json["proxy_apps"] as? JsonObject)?.also {
+//                        proxyApps = it["enabled"].optBoolean ?: proxyApps
+//                        bypass = it["bypass"].optBoolean ?: bypass
+//                        individual = (it["android_list"] as? JsonArray)?.asIterable()?.mapNotNull { it.optString }
+//                                ?.joinToString("\n") ?: individual
 //                    }
-                    name = json["remarks"].optString
-                    route = json["route"].optString ?: route
-                    if (fallback) return@apply
-                    remoteDns = json["remote_dns"].optString ?: remoteDns
-                    ipv6 = json["ipv6"].optBoolean ?: ipv6
-                    metered = json["metered"].optBoolean ?: metered
-                    (json["proxy_apps"] as? JsonObject)?.also {
-                        proxyApps = it["enabled"].optBoolean ?: proxyApps
-                        bypass = it["bypass"].optBoolean ?: bypass
-                        individual = (it["android_list"] as? JsonArray)?.asIterable()?.mapNotNull { it.optString }
-                                ?.joinToString("\n") ?: individual
-                    }
-                    udpdns = json["udpdns"].optBoolean ?: udpdns
-                    (json["udp_fallback"] as? JsonObject)?.let { tryParse(it, true) }?.also { fallbackMap[this] = it }
-                }
-            }
+//                    udpdns = json["udpdns"].optBoolean ?: udpdns
+//                    (json["udp_fallback"] as? JsonObject)?.let { tryParse(it, true) }?.also { fallbackMap[this] = it }
+//                }
+//            }
 
-            fun process(json: JsonElement?) {
-                when (json) {
-                    is JsonObject -> {
-                        val profile = tryParse(json)
-                        if (profile != null) add(profile) else for ((_, value) in json.entrySet()) process(value)
-                    }
-                    is JsonArray -> json.asIterable().forEach(this::process)
-                    // ignore other types
-                }
-            }
+//            fun process(json: JsonElement?) {
+//                when (json) {
+//                    is JsonObject -> {
+//                        val profile = tryParse(json)
+//                        if (profile != null) add(profile) else for ((_, value) in json.entrySet()) process(value)
+//                    }
+//                    is JsonArray -> json.asIterable().forEach(this::process)
+//                    // ignore other types
+//                }
+//            }
 
-            fun finalize(create: (Profile) -> Profile) {
-                val profiles = ProfileManager.getAllProfiles() ?: emptyList()
-                for ((profile, fallback) in fallbackMap) {
-                    val match = profiles.firstOrNull {
-                        fallback.host == it.host && fallback.remotePort == it.remotePort &&
-                                fallback.password == it.password && fallback.method == it.method &&
-                                it.plugin.isNullOrEmpty()
-                    }
-                    profile.udpFallback = (match ?: create(fallback)).id
-                    ProfileManager.updateProfile(profile)
-                }
-            }
-        }
+//            fun finalize(create: (Profile) -> Profile) {
+//                val profiles = ProfileManager.getAllProfiles() ?: emptyList()
+//                for ((profile, fallback) in fallbackMap) {
+//                    val match = profiles.firstOrNull {
+//                        fallback.host == it.host && fallback.remotePort == it.remotePort &&
+//                                fallback.password == it.password && fallback.method == it.method &&
+//                                it.plugin.isNullOrEmpty()
+//                    }
+//                    profile.udpFallback = (match ?: create(fallback)).id
+//                    ProfileManager.updateProfile(profile)
+//                }
+//            }
+//        }
 
-        fun parseJson(json: JsonElement, feature: Profile? = null, create: (Profile) -> Profile) {
-            JsonParser(feature).run {
-                process(json)
-                for (i in indices) {
-                    val fallback = fallbackMap.remove(this[i])
-                    this[i] = create(this[i])
-                    fallback?.also { fallbackMap[this[i]] = it }
-                }
-                finalize(create)
-            }
-        }
+//        fun parseJson(json: JsonElement, feature: Profile? = null, create: (Profile) -> Profile) {
+//            JsonParser(feature).run {
+//                process(json)
+//                for (i in indices) {
+//                    val fallback = fallbackMap.remove(this[i])
+//                    this[i] = create(this[i])
+//                    fallback?.also { fallbackMap[this[i]] = it }
+//                }
+//                finalize(create)
+//            }
+//        }
     }
 
-    @androidx.room.Dao
-    interface Dao {
-        @Query("SELECT * FROM `Profile` WHERE `id` = :id")
-        operator fun get(id: Long): Profile?
-
-        @Query("SELECT * FROM `Profile` WHERE `Subscription` != 2 ORDER BY `userOrder`")
-        fun listActive(): List<Profile>
-
-        @Query("SELECT * FROM `Profile`")
-        fun listAll(): List<Profile>
-
-        @Query("SELECT MAX(`userOrder`) + 1 FROM `Profile`")
-        fun nextOrder(): Long?
-
-        @Query("SELECT 1 FROM `Profile` LIMIT 1")
-        fun isNotEmpty(): Boolean
-
-        @Insert
-        fun create(value: Profile): Long
-
-        @Update
-        fun update(value: Profile): Int
-
-        @Query("DELETE FROM `Profile` WHERE `id` = :id")
-        fun delete(id: Long): Int
-
-        @Query("DELETE FROM `Profile`")
-        fun deleteAll(): Int
-    }
+//    @androidx.room.Dao
+//    interface Dao {
+//        @Query("SELECT * FROM `Profile` WHERE `id` = :id")
+//        operator fun get(id: Long): Profile?
+//
+//        @Query("SELECT * FROM `Profile` WHERE `Subscription` != 2 ORDER BY `userOrder`")
+//        fun listActive(): List<Profile>
+//
+//        @Query("SELECT * FROM `Profile`")
+//        fun listAll(): List<Profile>
+//
+//        @Query("SELECT MAX(`userOrder`) + 1 FROM `Profile`")
+//        fun nextOrder(): Long?
+//
+//        @Query("SELECT 1 FROM `Profile` LIMIT 1")
+//        fun isNotEmpty(): Boolean
+//
+//        @Insert
+//        fun create(value: Profile): Long
+//
+//        @Update
+//        fun update(value: Profile): Int
+//
+//        @Query("DELETE FROM `Profile` WHERE `id` = :id")
+//        fun delete(id: Long): Int
+//
+//        @Query("DELETE FROM `Profile`")
+//        fun deleteAll(): Int
+//    }
 
     val formattedAddress get() = (if (host.contains(":")) "[%s]:%d" else "%s:%d").format(host, remotePort)
     val formattedName get() = if (name.isNullOrEmpty()) formattedAddress else name!!
@@ -338,45 +341,45 @@ data class Profile(
         if (fallback != null && fallback.plugin.isNullOrEmpty()) fallback.toJson().also { put("udp_fallback", it) }
     }
 
-    fun serialize() {
-        DataStore.editingId = id
-        DataStore.privateStore.putString(Key.name, name)
-        DataStore.privateStore.putString(Key.host, host)
-        DataStore.privateStore.putString(Key.remotePort, remotePort.toString())
-        DataStore.privateStore.putString(Key.password, password)
-        DataStore.privateStore.putString(Key.route, route)
-        DataStore.privateStore.putString(Key.remoteDns, remoteDns)
-        DataStore.privateStore.putString(Key.method, method)
-        DataStore.proxyApps = proxyApps
-        DataStore.bypass = bypass
-        DataStore.privateStore.putBoolean(Key.udpdns, udpdns)
-        DataStore.privateStore.putBoolean(Key.ipv6, ipv6)
-        DataStore.privateStore.putBoolean(Key.metered, metered)
-        DataStore.individual = individual
-        DataStore.plugin = plugin ?: ""
-        DataStore.udpFallback = udpFallback
-        DataStore.privateStore.remove(Key.dirty)
-    }
+//    fun serialize() {
+//        DataStore.editingId = id
+//        DataStore.privateStore.putString(Key.name, name)
+//        DataStore.privateStore.putString(Key.host, host)
+//        DataStore.privateStore.putString(Key.remotePort, remotePort.toString())
+//        DataStore.privateStore.putString(Key.password, password)
+//        DataStore.privateStore.putString(Key.route, route)
+//        DataStore.privateStore.putString(Key.remoteDns, remoteDns)
+//        DataStore.privateStore.putString(Key.method, method)
+//        DataStore.proxyApps = proxyApps
+//        DataStore.bypass = bypass
+//        DataStore.privateStore.putBoolean(Key.udpdns, udpdns)
+//        DataStore.privateStore.putBoolean(Key.ipv6, ipv6)
+//        DataStore.privateStore.putBoolean(Key.metered, metered)
+//        DataStore.individual = individual
+//        DataStore.plugin = plugin ?: ""
+//        DataStore.udpFallback = udpFallback
+//        DataStore.privateStore.remove(Key.dirty)
+//    }
 
-    fun deserialize() {
-        check(id == 0L || DataStore.editingId == id)
-        DataStore.editingId = null
-        // It's assumed that default values are never used, so 0/false/null is always used even if that isn't the case
-        name = DataStore.privateStore.getString(Key.name) ?: ""
-        // It's safe to trim the hostname, as we expect no leading or trailing whitespaces here
-        host = (DataStore.privateStore.getString(Key.host) ?: "").trim()
-        remotePort = parsePort(DataStore.privateStore.getString(Key.remotePort), 8388, 1)
-        password = DataStore.privateStore.getString(Key.password) ?: ""
-        method = DataStore.privateStore.getString(Key.method) ?: ""
-        route = DataStore.privateStore.getString(Key.route) ?: ""
-        remoteDns = DataStore.privateStore.getString(Key.remoteDns) ?: ""
-        proxyApps = DataStore.proxyApps
-        bypass = DataStore.bypass
-        udpdns = DataStore.privateStore.getBoolean(Key.udpdns, false)
-        ipv6 = DataStore.privateStore.getBoolean(Key.ipv6, false)
-        metered = DataStore.privateStore.getBoolean(Key.metered, false)
-        individual = DataStore.individual
-        plugin = DataStore.plugin
-        udpFallback = DataStore.udpFallback
-    }
+//    fun deserialize() {
+//        check(id == 0L || DataStore.editingId == id)
+//        DataStore.editingId = null
+//        // It's assumed that default values are never used, so 0/false/null is always used even if that isn't the case
+//        name = DataStore.privateStore.getString(Key.name) ?: ""
+//        // It's safe to trim the hostname, as we expect no leading or trailing whitespaces here
+//        host = (DataStore.privateStore.getString(Key.host) ?: "").trim()
+//        remotePort = parsePort(DataStore.privateStore.getString(Key.remotePort), 8388, 1)
+//        password = DataStore.privateStore.getString(Key.password) ?: ""
+//        method = DataStore.privateStore.getString(Key.method) ?: ""
+//        route = DataStore.privateStore.getString(Key.route) ?: ""
+//        remoteDns = DataStore.privateStore.getString(Key.remoteDns) ?: ""
+//        proxyApps = DataStore.proxyApps
+//        bypass = DataStore.bypass
+//        udpdns = DataStore.privateStore.getBoolean(Key.udpdns, false)
+//        ipv6 = DataStore.privateStore.getBoolean(Key.ipv6, false)
+//        metered = DataStore.privateStore.getBoolean(Key.metered, false)
+//        individual = DataStore.individual
+//        plugin = DataStore.plugin
+//        udpFallback = DataStore.udpFallback
+//    }
 }

@@ -29,8 +29,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.github.shadowsocks.core.R
-import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.utils.Key
+//import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.StartService
 import com.github.shadowsocks.utils.broadcastReceiver
 
@@ -39,10 +39,10 @@ class VpnRequestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (DataStore.serviceMode != Key.modeVpn) {
-            finish()
-            return
-        }
+//        if (DataStore.serviceMode != Key.modeVpn) {
+//            finish()
+//            return
+//        }
         if (getSystemService<KeyguardManager>()!!.isKeyguardLocked) {
             receiver = broadcastReceiver { _, _ -> connect.launch(null) }
             registerReceiver(receiver, IntentFilter(Intent.ACTION_USER_PRESENT))

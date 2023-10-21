@@ -29,7 +29,7 @@ import android.os.IBinder
 import android.os.RemoteCallbackList
 import android.os.RemoteException
 import androidx.core.content.ContextCompat
-import com.github.shadowsocks.BootReceiver
+//import com.github.shadowsocks.BootReceiver
 import com.github.shadowsocks.Core
 import com.github.shadowsocks.Core.app
 import com.github.shadowsocks.acl.Acl
@@ -37,8 +37,9 @@ import com.github.shadowsocks.aidl.IShadowsocksService
 import com.github.shadowsocks.aidl.IShadowsocksServiceCallback
 import com.github.shadowsocks.aidl.TrafficStats
 import com.github.shadowsocks.core.R
+import com.github.shadowsocks.database.Profile
 import com.github.shadowsocks.net.DnsResolverCompat
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Action
 import com.github.shadowsocks.utils.broadcastReceiver
 import com.github.shadowsocks.utils.readableMessage
@@ -300,14 +301,15 @@ object BaseService {
 
                 // stop the service if nothing has bound to it
                 if (restart) startRunner() else {
-                    BootReceiver.enabled = false
+//                    BootReceiver.enabled = false
                     stopSelf()
                 }
             }
         }
 
         fun persistStats() =
-                listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile.id) }
+//                listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile.id) }
+                listOfNotNull(data.proxy, data.udpFallback).forEach { it.trafficMonitor?.persistStats(it.profile) }
 
         suspend fun preInit() { }
         suspend fun rawResolver(query: ByteArray) = DnsResolverCompat.resolveRawOnActiveNetwork(query)
@@ -316,25 +318,27 @@ object BaseService {
         fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
             val data = data
             if (data.state != State.Stopped) return Service.START_NOT_STICKY
-            val expanded = Core.currentProfile
+//            val expanded = Core.currentProfile
             this as Context
-            if (expanded == null) {
-                // gracefully shutdown: https://stackoverflow.com/q/47337857/2245107
-                data.notification = createNotification("")
-                stopRunner(false, getString(R.string.profile_empty))
-                return Service.START_NOT_STICKY
-            }
-            val (profile, fallback) = expanded
+//            if (expanded == null) {
+//                // gracefully shutdown: https://stackoverflow.com/q/47337857/2245107
+//                data.notification = createNotification("")
+//                stopRunner(false, getString(R.string.profile_empty))
+//                return Service.START_NOT_STICKY
+//            }
+//            val (profile, fallback) = expanded
+            val profile = Profile.defProfile
             try {
                 data.proxy = ProxyInstance(profile)
-                data.udpFallback = if (fallback == null) null else ProxyInstance(fallback, profile.route)
+//                data.udpFallback = if (fallback == null) null else ProxyInstance(fallback, profile.route)
+                data.udpFallback = null
             } catch (e: IllegalArgumentException) {
                 data.notification = createNotification("")
                 stopRunner(false, e.message)
                 return Service.START_NOT_STICKY
             }
 
-            BootReceiver.enabled = DataStore.persistAcrossReboot
+//            BootReceiver.enabled = DataStore.persistAcrossReboot
             if (!data.closeReceiverRegistered) {
                 ContextCompat.registerReceiver(this, data.closeReceiver, IntentFilter().apply {
                     addAction(Action.RELOAD)

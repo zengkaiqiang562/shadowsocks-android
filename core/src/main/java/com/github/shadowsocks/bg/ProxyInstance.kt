@@ -29,7 +29,7 @@ import com.github.shadowsocks.core.R
 import com.github.shadowsocks.database.Profile
 //import com.github.shadowsocks.plugin.PluginConfiguration
 //import com.github.shadowsocks.plugin.PluginManager
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import kotlinx.coroutines.CoroutineScope
 import org.json.JSONArray
 import org.json.JSONObject
@@ -88,10 +88,14 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
         config.put("locals", JSONArray().apply {
             // local SOCKS5 proxy
             put(JSONObject().apply {
-                put("local_address", DataStore.listenAddress)
-                put("local_port", DataStore.portProxy)
-                put("local_udp_address", DataStore.listenAddress)
-                put("local_udp_port", DataStore.portProxy)
+//                put("local_address", DataStore.listenAddress)
+//                put("local_port", DataStore.portProxy)
+//                put("local_udp_address", DataStore.listenAddress)
+//                put("local_udp_port", DataStore.portProxy)
+                put("local_address", "127.0.0.1")
+                put("local_port", 1080)
+                put("local_udp_address", "127.0.0.1")
+                put("local_udp_port", 1080)
                 put("mode", mode)
             })
 
@@ -102,8 +106,10 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
                 throw BaseService.ExpectedExceptionWrapper(e)
             }.let { dns ->
                 put(JSONObject().apply {
-                    put("local_address", DataStore.listenAddress)
-                    put("local_port", DataStore.portLocalDns)
+//                    put("local_address", DataStore.listenAddress)
+//                    put("local_port", DataStore.portLocalDns)
+                    put("local_address", "127.0.0.1")
+                    put("local_port", 5450)
                     put("local_dns_address", "local_dns_path")
                     put("remote_dns_address", dns.host ?: "0.0.0.0")
                     put("remote_dns_port", if (dns.port < 0) 53 else dns.port)
@@ -137,7 +143,8 @@ class ProxyInstance(val profile: Profile, private val route: String = profile.ro
     fun shutdown(scope: CoroutineScope) {
         trafficMonitor?.apply {
             thread.shutdown(scope)
-            persistStats(profile.id)    // Make sure update total traffic when stopping the runner
+//            persistStats(profile.id)    // Make sure update total traffic when stopping the runner
+            persistStats(profile)    // Make sure update total traffic when stopping the runner
         }
         trafficMonitor = null
         configFile?.delete()    // remove old config possibly in device storage

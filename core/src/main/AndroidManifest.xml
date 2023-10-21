@@ -49,24 +49,24 @@
             </intent-filter>
         </service>
 
-        <service
+        <!--<service
             android:name="com.github.shadowsocks.bg.TransproxyService"
             android:process=":bg"
             android:directBootAware="true"
             android:exported="false">
-        </service>
+        </service>-->
 
-        <service
+        <!--<service
             android:name="com.github.shadowsocks.bg.ProxyService"
             android:process=":bg"
             android:directBootAware="true"
             android:exported="false">
-        </service>
+        </service>-->
 
-        <service
+        <!--<service
             android:name="com.github.shadowsocks.subscription.SubscriptionService"
             android:exported="false">
-        </service>
+        </service>-->
 
 <!--        <activity-->
 <!--            android:name="com.github.shadowsocks.UrlImportActivity"-->
@@ -88,7 +88,7 @@
             android:excludeFromRecents="true"
             android:taskAffinity=""/>
 
-        <receiver android:name="com.github.shadowsocks.BootReceiver"
+        <!--<receiver android:name="com.github.shadowsocks.BootReceiver"
                   android:process=":bg"
                   android:directBootAware="true"
                   android:exported="true"
@@ -98,7 +98,7 @@
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <!--<activity android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
                   android:theme="@style/Theme.Shadowsocks.ActionBar"/>

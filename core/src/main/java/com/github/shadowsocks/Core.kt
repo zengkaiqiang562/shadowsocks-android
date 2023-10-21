@@ -40,12 +40,12 @@ import com.github.shadowsocks.aidl.ShadowsocksConnection
 import com.github.shadowsocks.core.BuildConfig
 import com.github.shadowsocks.core.R
 import com.github.shadowsocks.database.Profile
-import com.github.shadowsocks.database.ProfileManager
-import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.subscription.SubscriptionService
+//import com.github.shadowsocks.database.ProfileManager
+//import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.subscription.SubscriptionService
 import com.github.shadowsocks.utils.Action
 import com.github.shadowsocks.utils.DeviceStorageApp
-import com.github.shadowsocks.utils.DirectBoot
+//import com.github.shadowsocks.utils.DirectBoot
 import com.github.shadowsocks.utils.Key
 //import com.google.firebase.crashlytics.FirebaseCrashlytics
 //import com.google.firebase.ktx.Firebase
@@ -79,19 +79,19 @@ object Core : Configuration.Provider {
         }
     }
 
-    val activeProfileIds get() = ProfileManager.getProfile(DataStore.profileId).let {
-        if (it == null) emptyList() else listOfNotNull(it.id, it.udpFallback)
-    }
-    val currentProfile: ProfileManager.ExpandedProfile? get() {
-        if (DataStore.directBootAware) DirectBoot.getDeviceProfile()?.apply { return this }
-        return ProfileManager.expand(ProfileManager.getProfile(DataStore.profileId) ?: return null)
-    }
+//    val activeProfileIds get() = ProfileManager.getProfile(DataStore.profileId).let {
+//        if (it == null) emptyList() else listOfNotNull(it.id, it.udpFallback)
+//    }
+//    val currentProfile: ProfileManager.ExpandedProfile? get() {
+//        if (DataStore.directBootAware) DirectBoot.getDeviceProfile()?.apply { return this }
+//        return ProfileManager.expand(ProfileManager.getProfile(DataStore.profileId) ?: return null)
+//    }
 
-    fun switchProfile(id: Long): Profile {
-        val result = ProfileManager.getProfile(id) ?: ProfileManager.createProfile()
-        DataStore.profileId = result.id
-        return result
-    }
+//    fun switchProfile(id: Long): Profile {
+//        val result = ProfileManager.getProfile(id) ?: ProfileManager.createProfile()
+//        DataStore.profileId = result.id
+//        return result
+//    }
 
     fun init(app: Application, configureClass: KClass<out Any>) {
         this.app = app
@@ -125,10 +125,11 @@ object Core : Configuration.Provider {
         })
 
         // handle data restored/crash
-        if (Build.VERSION.SDK_INT >= 24 && DataStore.directBootAware && user.isUserUnlocked) {
-            DirectBoot.flushTrafficStats()
-        }
-        if (DataStore.publicStore.getLong(Key.assetUpdateTime, -1) != packageInfo.lastUpdateTime) {
+//        if (Build.VERSION.SDK_INT >= 24 && DataStore.directBootAware && user.isUserUnlocked) {
+//            DirectBoot.flushTrafficStats()
+//        }
+//        if (DataStore.publicStore.getLong(Key.assetUpdateTime, -1) != packageInfo.lastUpdateTime) { // TODO App 升级时才更新
+            // 更新 assets 中的访问控制列表（ACL）
             val assetManager = app.assets
             try {
                 for (file in assetManager.list("acl")!!) assetManager.open("acl/$file").use { input ->
@@ -137,8 +138,8 @@ object Core : Configuration.Provider {
             } catch (e: IOException) {
                 Timber.w(e)
             }
-            DataStore.publicStore.putLong(Key.assetUpdateTime, packageInfo.lastUpdateTime)
-        }
+//            DataStore.publicStore.putLong(Key.assetUpdateTime, packageInfo.lastUpdateTime)
+//        }
         updateNotificationChannels()
     }
 
@@ -158,8 +159,8 @@ object Core : Configuration.Provider {
                     NotificationChannel("service-proxy", app.getText(R.string.service_proxy),
                             NotificationManager.IMPORTANCE_LOW),
                     NotificationChannel("service-transproxy", app.getText(R.string.service_transproxy),
-                            NotificationManager.IMPORTANCE_LOW),
-                    SubscriptionService.notificationChannel))
+                            NotificationManager.IMPORTANCE_LOW)/*,
+                    SubscriptionService.notificationChannel*/))
             notification.deleteNotificationChannel("service-nat")   // NAT mode is gone for good
         }
     }

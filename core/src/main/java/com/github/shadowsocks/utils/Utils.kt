@@ -32,7 +32,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.util.TypedValue
 import androidx.annotation.AttrRes
-import androidx.preference.Preference
+//import androidx.preference.Preference
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -131,4 +131,4 @@ fun Resources.Theme.resolveResourceId(@AttrRes resId: Int): Int {
     return typedValue.resourceId
 }
 
-fun Preference.remove() = parent!!.removePreference(this)
+//fun Preference.remove() = parent!!.removePreference(this)

@@ -38,14 +38,14 @@ import androidx.core.net.toUri
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceDataStore
-import com.github.shadowsocks.acl.CustomRulesFragment
+//import com.github.shadowsocks.acl.CustomRulesFragment
 import com.github.shadowsocks.aidl.IShadowsocksService
 import com.github.shadowsocks.aidl.ShadowsocksConnection
 import com.github.shadowsocks.aidl.TrafficStats
 import com.github.shadowsocks.bg.BaseService
-import com.github.shadowsocks.preference.DataStore
-import com.github.shadowsocks.preference.OnPreferenceDataStoreChangeListener
-import com.github.shadowsocks.subscription.SubscriptionFragment
+//import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.OnPreferenceDataStoreChangeListener
+//import com.github.shadowsocks.subscription.SubscriptionFragment
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.StartService
 import com.github.shadowsocks.widget.ListHolderListener
@@ -58,7 +58,7 @@ import com.google.android.material.snackbar.Snackbar
 //import com.google.firebase.ktx.Firebase
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPreferenceDataStoreChangeListener,
+class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback,/* OnPreferenceDataStoreChangeListener,*/
         NavigationView.OnNavigationItemSelectedListener {
     companion object {
         var stateListener: ((BaseService.State) -> Unit)? = null
@@ -179,17 +179,17 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
 
         changeState(BaseService.State.Idle, animate = false)    // reset everything to init state
         connection.connect(this, this)
-        DataStore.publicStore.registerChangeListener(this)
+//        DataStore.publicStore.registerChangeListener(this)
     }
 
-    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
-        when (key) {
-            Key.serviceMode -> {
-                connection.disconnect(this)
-                connection.connect(this, this)
-            }
-        }
-    }
+//    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
+//        when (key) {
+//            Key.serviceMode -> {
+//                connection.disconnect(this)
+//                connection.connect(this, this)
+//            }
+//        }
+//    }
 
     private fun displayFragment(fragment: ToolbarFragment) {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_holder, fragment).commitAllowingStateLoss()
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
                     displayFragment(ProfilesFragment())
                     connection.bandwidthTimeout = connection.bandwidthTimeout   // request stats update
                 }
-                R.id.globalSettings -> displayFragment(GlobalSettingsFragment())
+//                R.id.globalSettings -> displayFragment(GlobalSettingsFragment())
                 R.id.about -> {
 //                    Firebase.analytics.logEvent("about") { }
                     displayFragment(AboutFragment())
@@ -212,8 +212,8 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
                     launchUrl(getString(R.string.faq_url))
                     return true
                 }
-                R.id.customRules -> displayFragment(CustomRulesFragment())
-                R.id.subscriptions -> displayFragment(SubscriptionFragment())
+//                R.id.customRules -> displayFragment(CustomRulesFragment())
+//                R.id.subscriptions -> displayFragment(SubscriptionFragment())
                 else -> return false
             }
             item.isChecked = true
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback, OnPref
 
     override fun onDestroy() {
         super.onDestroy()
-        DataStore.publicStore.unregisterChangeListener(this)
+//        DataStore.publicStore.unregisterChangeListener(this)
         connection.disconnect(this)
     }
 }

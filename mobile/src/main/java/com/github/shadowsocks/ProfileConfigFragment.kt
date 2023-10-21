@@ -30,17 +30,17 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.component1
-import androidx.activity.result.component2
-import androidx.activity.result.contract.ActivityResultContracts
+//import androidx.activity.result.component1
+//import androidx.activity.result.component2
+//import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
-import androidx.fragment.app.setFragmentResultListener
+//import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import androidx.preference.*
 import com.github.shadowsocks.database.Profile
-import com.github.shadowsocks.database.ProfileManager
+//import com.github.shadowsocks.database.ProfileManager
 import com.github.shadowsocks.plugin.fragment.AlertDialogFragment
 import com.github.shadowsocks.plugin.fragment.Empty
 import com.github.shadowsocks.plugin.fragment.showAllowingStateLoss
@@ -53,7 +53,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 class ProfileConfigFragment : PreferenceFragmentCompat(),
-        Preference.OnPreferenceChangeListener, OnPreferenceDataStoreChangeListener {
+        Preference.OnPreferenceChangeListener/*, OnPreferenceDataStoreChangeListener*/ {
     companion object PasswordSummaryProvider : Preference.SummaryProvider<EditTextPreference> {
         override fun provideSummary(preference: EditTextPreference) = "\u2022".repeat(preference.text?.length ?: 0)
     }
@@ -64,7 +64,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         override fun AlertDialog.Builder.prepare(listener: DialogInterface.OnClickListener) {
             setTitle(R.string.delete_confirm_prompt)
             setPositiveButton(R.string.yes) { _, _ ->
-                ProfileManager.delProfile(arg.profileId)
+//                ProfileManager.delProfile(arg.profileId)
                 requireActivity().finish()
             }
             setNegativeButton(R.string.no, null)
@@ -80,22 +80,23 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
     private lateinit var udpFallback: Preference
 
     private fun makeDirt() {
-        DataStore.dirty = true
-        (activity as ProfileConfigActivity).unsavedChangesHandler.isEnabled = true
+//        DataStore.dirty = true
+//        (activity as ProfileConfigActivity).unsavedChangesHandler.isEnabled = true
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceManager.preferenceDataStore = DataStore.privateStore
-        val activity = requireActivity()
-        profileId = activity.intent.getLongExtra(Action.EXTRA_PROFILE_ID, -1L)
-        if (profileId != -1L && profileId != DataStore.editingId) {
-            activity.finish()
-            return
-        }
+//        preferenceManager.preferenceDataStore = DataStore.privateStore
+//        val activity = requireActivity()
+//        profileId = activity.intent.getLongExtra(Action.EXTRA_PROFILE_ID, -1L)
+//        if (profileId != -1L && profileId != DataStore.editingId) {
+//            activity.finish()
+//            return
+//        }
         addPreferencesFromResource(R.xml.pref_profile)
-        findPreference<EditTextPreference>(Key.remotePort)!!.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
+//        findPreference<EditTextPreference>(Key.remotePort)!!.setOnBindEditTextListener(EditTextPreferenceModifiers.Port)
         findPreference<EditTextPreference>(Key.password)!!.summaryProvider = PasswordSummaryProvider
-        val serviceMode = DataStore.serviceMode
+//        val serviceMode = DataStore.serviceMode
+        val serviceMode = Key.modeVpn
         findPreference<Preference>(Key.ipv6)!!.isEnabled = serviceMode == Key.modeVpn
         isProxyApps = findPreference(Key.proxyApps)!!
         isProxyApps.isEnabled = serviceMode == Key.modeVpn
@@ -104,29 +105,29 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
             if (newValue as Boolean) makeDirt()
             newValue
         }
-        findPreference<Preference>(Key.metered)!!.apply {
-            if (Build.VERSION.SDK_INT >= 28) isEnabled = serviceMode == Key.modeVpn else remove()
-        }
+//        findPreference<Preference>(Key.metered)!!.apply {
+//            if (Build.VERSION.SDK_INT >= 28) isEnabled = serviceMode == Key.modeVpn else remove()
+//        }
 //        plugin = findPreference(Key.plugin)!!
         pluginConfigure = findPreference(Key.pluginConfigure)!!
-        pluginConfigure.setOnBindEditTextListener(EditTextPreferenceModifiers.Monospace)
+//        pluginConfigure.setOnBindEditTextListener(EditTextPreferenceModifiers.Monospace)
         pluginConfigure.onPreferenceChangeListener = this
 //        pluginConfiguration = PluginConfiguration(DataStore.plugin)
 //        initPlugins()
         udpFallback = findPreference(Key.udpFallback)!!
-        DataStore.privateStore.registerChangeListener(this)
+//        DataStore.privateStore.registerChangeListener(this)
 
-        val profile = ProfileManager.getProfile(profileId) ?: Profile()
-        if (profile.subscription == Profile.SubscriptionStatus.Active) {
-            findPreference<Preference>(Key.name)!!.isEnabled = false
-            findPreference<Preference>(Key.host)!!.isEnabled = false
-            findPreference<Preference>(Key.password)!!.isEnabled = false
-            findPreference<Preference>(Key.method)!!.isEnabled = false
-            findPreference<Preference>(Key.remotePort)!!.isEnabled = false
-//            plugin.isEnabled = false
-            pluginConfigure.isEnabled = false
-            udpFallback.isEnabled = false
-        }
+//        val profile = ProfileManager.getProfile(profileId) ?: Profile()
+//        if (profile.subscription == Profile.SubscriptionStatus.Active) {
+//            findPreference<Preference>(Key.name)!!.isEnabled = false
+//            findPreference<Preference>(Key.host)!!.isEnabled = false
+//            findPreference<Preference>(Key.password)!!.isEnabled = false
+//            findPreference<Preference>(Key.method)!!.isEnabled = false
+//            findPreference<Preference>(Key.remotePort)!!.isEnabled = false
+////            plugin.isEnabled = false
+//            pluginConfigure.isEnabled = false
+//            udpFallback.isEnabled = false
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -172,13 +173,13 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
 //    }
 
     private fun saveAndExit() {
-        val profile = ProfileManager.getProfile(profileId) ?: Profile()
-        profile.id = profileId
-        profile.deserialize()
-        ProfileManager.updateProfile(profile)
-        ProfilesFragment.instance?.profilesAdapter?.deepRefreshId(profileId)
-        if (profileId in Core.activeProfileIds && DataStore.directBootAware) DirectBoot.update()
-        requireActivity().finish()
+//        val profile = ProfileManager.getProfile(profileId) ?: Profile()
+//        profile.id = profileId
+//        profile.deserialize()
+//        ProfileManager.updateProfile(profile)
+//        ProfilesFragment.instance?.profilesAdapter?.deepRefreshId(profileId)
+//        if (profileId in Core.activeProfileIds && DataStore.directBootAware) DirectBoot.update()
+//        requireActivity().finish()
     }
 
     override fun onAttach(context: Context) {
@@ -192,10 +193,10 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
 
     override fun onResume() {
         super.onResume()
-        isProxyApps.isChecked = DataStore.proxyApps // fetch proxyApps updated by AppManager
-        val fallbackProfile = DataStore.udpFallback?.let { ProfileManager.getProfile(it) }
-        if (fallbackProfile == null) udpFallback.setSummary(R.string.plugin_disabled)
-        else udpFallback.summary = fallbackProfile.formattedName
+//        isProxyApps.isChecked = DataStore.proxyApps // fetch proxyApps updated by AppManager
+//        val fallbackProfile = DataStore.udpFallback?.let { ProfileManager.getProfile(it) }
+//        if (fallbackProfile == null) udpFallback.setSummary(R.string.plugin_disabled)
+//        else udpFallback.summary = fallbackProfile.formattedName
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean = try {
@@ -210,9 +211,9 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
         false
     }
 
-    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
-        if (key != Key.proxyApps && findPreference<Preference>(key) != null) makeDirt()
-    }
+//    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
+//        if (key != Key.proxyApps && findPreference<Preference>(key) != null) makeDirt()
+//    }
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
         when (preference.key) {
@@ -264,7 +265,7 @@ class ProfileConfigFragment : PreferenceFragmentCompat(),
     }
 
     override fun onDestroy() {
-        DataStore.privateStore.unregisterChangeListener(this)
+//        DataStore.privateStore.unregisterChangeListener(this)
         super.onDestroy()
     }
 }

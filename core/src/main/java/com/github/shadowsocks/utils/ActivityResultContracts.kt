@@ -27,7 +27,7 @@ import android.net.VpnService
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import com.github.shadowsocks.Core
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import timber.log.Timber
 
 private val jsonMimeTypes = arrayOf("application/*", "text/*")
@@ -46,7 +46,7 @@ class StartService : ActivityResultContract<Void?, Boolean>() {
     private var cachedIntent: Intent? = null
 
     override fun getSynchronousResult(context: Context, input: Void?): SynchronousResult<Boolean>? {
-        if (DataStore.serviceMode == Key.modeVpn) VpnService.prepare(context)?.let { intent ->
+        /*if (DataStore.serviceMode == Key.modeVpn) */VpnService.prepare(context)?.let { intent ->
             cachedIntent = intent
             return null
         }

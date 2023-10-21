@@ -39,7 +39,7 @@ import com.github.shadowsocks.net.ConcurrentLocalSocketListener
 import com.github.shadowsocks.net.DefaultNetworkListener
 import com.github.shadowsocks.net.DnsResolverCompat
 import com.github.shadowsocks.net.Subnet
-import com.github.shadowsocks.preference.DataStore
+//import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.utils.Key
 import com.github.shadowsocks.utils.int
 import kotlinx.coroutines.CoroutineScope
@@ -135,11 +135,11 @@ class VpnService : BaseVpnService(), BaseService.Interface {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (DataStore.serviceMode == Key.modeVpn) {
+//        if (DataStore.serviceMode == Key.modeVpn) {
             if (prepare(this) != null) {
                 startActivity(Intent(this, VpnRequestActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             } else return super<BaseService.Interface>.onStartCommand(intent, flags, startId)
-        }
+//        }
         stopRunner()
         return Service.START_NOT_STICKY
     }
@@ -211,10 +211,11 @@ class VpnService : BaseVpnService(), BaseService.Interface {
 
         val cmd = arrayListOf(File(applicationInfo.nativeLibraryDir, Executable.TUN2SOCKS).absolutePath,
                 "--netif-ipaddr", PRIVATE_VLAN4_ROUTER,
-                "--socks-server-addr", "${DataStore.listenAddress}:${DataStore.portProxy}",
+//                "--socks-server-addr", "${DataStore.listenAddress}:${DataStore.portProxy}",
+                "--socks-server-addr", "127.0.0.1:1080",
                 "--tunmtu", VPN_MTU.toString(),
                 "--sock-path", "sock_path",
-                "--dnsgw", "127.0.0.1:${DataStore.portLocalDns}",
+                "--dnsgw", "127.0.0.1:5450",
                 "--loglevel", "warning")
         if (profile.ipv6) {
             cmd += "--netif-ip6addr"
