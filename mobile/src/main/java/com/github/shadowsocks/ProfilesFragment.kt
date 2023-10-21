@@ -57,10 +57,10 @@ import com.github.shadowsocks.utils.readableMessage
 import com.github.shadowsocks.widget.ListHolderListener
 import com.github.shadowsocks.widget.MainListListener
 import com.github.shadowsocks.widget.UndoSnackbarManager
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.google.zxing.MultiFormatWriter
-import com.google.zxing.WriterException
+//import com.google.zxing.BarcodeFormat
+//import com.google.zxing.EncodeHintType
+//import com.google.zxing.MultiFormatWriter
+//import com.google.zxing.WriterException
 import timber.log.Timber
 import java.nio.charset.StandardCharsets
 

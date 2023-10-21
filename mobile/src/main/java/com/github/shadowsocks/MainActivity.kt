@@ -30,14 +30,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
+//import androidx.browser.customtabs.CustomTabColorSchemeParams
+//import androidx.browser.customtabs.CustomTabsIntent
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.*
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.preference.PreferenceDataStore
+//import androidx.preference.PreferenceDataStore
 //import com.github.shadowsocks.acl.CustomRulesFragment
 import com.github.shadowsocks.aidl.IShadowsocksService
 import com.github.shadowsocks.aidl.ShadowsocksConnection
@@ -75,22 +75,22 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback,/* OnPr
         anchorView = fab
     }
 
-    private val customTabsIntent by lazy {
-        CustomTabsIntent.Builder().apply {
-            setColorScheme(CustomTabsIntent.COLOR_SCHEME_SYSTEM)
-            setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, CustomTabColorSchemeParams.Builder().apply {
-                setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.light_color_primary))
-            }.build())
-            setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, CustomTabColorSchemeParams.Builder().apply {
-                setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.dark_color_primary))
-            }.build())
-        }.build()
-    }
-    fun launchUrl(uri: String) = try {
-        customTabsIntent.launchUrl(this, uri.toUri())
-    } catch (_: ActivityNotFoundException) {
-        snackbar(uri).show()
-    }
+//    private val customTabsIntent by lazy {
+//        CustomTabsIntent.Builder().apply {
+//            setColorScheme(CustomTabsIntent.COLOR_SCHEME_SYSTEM)
+//            setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_LIGHT, CustomTabColorSchemeParams.Builder().apply {
+//                setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.light_color_primary))
+//            }.build())
+//            setColorSchemeParams(CustomTabsIntent.COLOR_SCHEME_DARK, CustomTabColorSchemeParams.Builder().apply {
+//                setToolbarColor(ContextCompat.getColor(this@MainActivity, R.color.dark_color_primary))
+//            }.build())
+//        }.build()
+//    }
+//    fun launchUrl(uri: String) = try {
+//        customTabsIntent.launchUrl(this, uri.toUri())
+//    } catch (_: ActivityNotFoundException) {
+//        snackbar(uri).show()
+//    }
 
     // service
     var state = BaseService.State.Idle
@@ -208,10 +208,10 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Callback,/* OnPr
 //                    Firebase.analytics.logEvent("about") { }
                     displayFragment(AboutFragment())
                 }
-                R.id.faq -> {
-                    launchUrl(getString(R.string.faq_url))
-                    return true
-                }
+//                R.id.faq -> {
+//                    launchUrl(getString(R.string.faq_url))
+//                    return true
+//                }
 //                R.id.customRules -> displayFragment(CustomRulesFragment())
 //                R.id.subscriptions -> displayFragment(SubscriptionFragment())
                 else -> return false

@@ -74,15 +74,15 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.8.1")
 
 
-    implementation("androidx.browser:browser:1.5.0-rc01")
-    implementation("androidx.camera:camera-camera2:1.2.1")
-    implementation("androidx.camera:camera-lifecycle:1.2.1")
-    implementation("androidx.camera:camera-view:1.2.1")
+//    implementation("androidx.browser:browser:1.5.0-rc01")
+//    implementation("androidx.camera:camera-camera2:1.2.1")
+//    implementation("androidx.camera:camera-lifecycle:1.2.1")
+//    implementation("androidx.camera:camera-view:1.2.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("com.google.mlkit:barcode-scanning:17.0.3")
-    implementation("com.google.zxing:core:3.5.1")
-    implementation("com.takisoft.preferencex:preferencex-simplemenu:1.1.0")
+//    implementation("com.google.mlkit:barcode-scanning:17.0.3")
+//    implementation("com.google.zxing:core:3.5.1")
+//    implementation("com.takisoft.preferencex:preferencex-simplemenu:1.1.0")
     implementation("com.twofortyfouram:android-plugin-api-for-locale:1.0.4")
     implementation("me.zhanghai.android.fastscroll:library:1.2.0")
 
