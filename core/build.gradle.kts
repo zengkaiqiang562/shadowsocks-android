@@ -8,10 +8,40 @@ plugins {
     id("kotlin-parcelize")
 }
 
-setupCore()
+//setupCore()
 
 android {
     namespace = "com.github.shadowsocks.core"
+
+
+    buildToolsVersion("33.0.1")
+    compileSdkVersion(33)
+    defaultConfig {
+        minSdk = 23
+        targetSdk = 33
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    val javaVersion = JavaVersion.VERSION_11
+    compileOptions {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+    }
+    lint.apply {
+        warning += "ExtraTranslation"
+        warning += "ImpliedQuantity"
+        informational += "MissingQuantity"
+        informational += "MissingTranslation"
+
+        disable += "BadConfigurationProvider"
+        warning += "RestrictedApi"
+        disable += "UseAppTint"
+    }
+    (this as ExtensionAware).extensions.getByName<org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions>("kotlinOptions").jvmTarget =
+        javaVersion.toString()
+
+    compileOptions.isCoreLibraryDesugaringEnabled = true
+    ndkVersion = "25.1.8937393"
+
 
     defaultConfig {
         consumerProguardFiles("proguard-rules.pro")
@@ -38,7 +68,8 @@ cargo {
     module = "src/main/rust/shadowsocks-rust"
     libname = "sslocal"
     targets = listOf("arm", "arm64", "x86", "x86_64")
-    profile = findProperty("CARGO_PROFILE")?.toString() ?: currentFlavor
+//    profile = findProperty("CARGO_PROFILE")?.toString() ?: currentFlavor
+    profile = "debug" // TODO 正式环境改成 "release"
     extraCargoBuildArguments = listOf("--bin", libname!!)
     featureSpec.noDefaultBut(arrayOf(
         "stream-cipher",
@@ -111,4 +142,9 @@ dependencies {
 //    kapt("androidx.room:room-compiler:$roomVersion")
 //    androidTestImplementation("androidx.room:room-testing:$roomVersion")
     androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5")
+
+    add("testImplementation", "junit:junit:4.13.2")
+    add("androidTestImplementation", "androidx.test:runner:1.5.2")
+    add("androidTestImplementation", "androidx.test.espresso:espresso-core:3.5.1")
+    add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.0.2")
 }

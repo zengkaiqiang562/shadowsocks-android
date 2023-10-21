@@ -7,11 +7,60 @@ plugins {
     id("kotlin-parcelize")
 }
 
-setupApp()
+//setupApp()
 
 android {
     namespace = "com.github.shadowsocks"
-    defaultConfig.applicationId = "com.github.shadowsocks"
+    buildToolsVersion("33.0.1")
+    compileSdkVersion(33)
+    defaultConfig {
+        applicationId = "com.github.shadowsocks"
+        minSdk = 23
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    val javaVersion = JavaVersion.VERSION_11
+    compileOptions {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
+    }
+    lint.apply {
+        warning += "ExtraTranslation"
+        warning += "ImpliedQuantity"
+        informational += "MissingQuantity"
+        informational += "MissingTranslation"
+
+        disable += "BadConfigurationProvider"
+        warning += "RestrictedApi"
+        disable += "UseAppTint"
+
+        disable += "RemoveWorkManagerInitializer"
+    }
+    (this as ExtensionAware).extensions.getByName<org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions>("kotlinOptions").jvmTarget =
+        javaVersion.toString()
+
+    compileOptions.isCoreLibraryDesugaringEnabled = true
+
+    ndkVersion = "25.1.8937393"
+
+    buildTypes {
+        getByName("debug") {
+            isPseudoLocalesEnabled = true
+        }
+        getByName("release") {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFile(getDefaultProguardFile("proguard-android.txt"))
+        }
+    }
+
+    packagingOptions.jniLibs.useLegacyPackaging = true
+    splits.abi {
+        isEnable = true
+        isUniversalApk = true
+    }
 }
 
 dependencies {
@@ -36,4 +85,12 @@ dependencies {
     implementation("com.takisoft.preferencex:preferencex-simplemenu:1.1.0")
     implementation("com.twofortyfouram:android-plugin-api-for-locale:1.0.4")
     implementation("me.zhanghai.android.fastscroll:library:1.2.0")
+
+    add("testImplementation", "junit:junit:4.13.2")
+    add("androidTestImplementation", "androidx.test:runner:1.5.2")
+    add("androidTestImplementation", "androidx.test.espresso:espresso-core:3.5.1")
+
+    add("coreLibraryDesugaring", "com.android.tools:desugar_jdk_libs:2.0.2")
+
+    add("implementation", project(":core"))
 }
