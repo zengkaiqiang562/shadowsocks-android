@@ -31,8 +31,9 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
-            <meta-data android:name="android.app.shortcuts"
-                       android:resource="@xml/shortcuts"/>
+            <!-- 长按app图标弹窗快捷方式 -->
+            <!--<meta-data android:name="android.app.shortcuts"
+                       android:resource="@xml/shortcuts"/>-->
         </activity>
 
         <activity
@@ -79,7 +80,7 @@
             </intent-filter>
         </activity>-->
 
-        <activity
+        <!--<activity
             android:name=".QuickToggleShortcut"
             android:label="@string/quick_toggle"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
@@ -91,7 +92,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
-        </activity>
+        </activity>-->
 
         <!--<service android:name=".bg.TileService"
                  android:label="@string/quick_toggle"

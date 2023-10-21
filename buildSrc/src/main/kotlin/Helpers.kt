@@ -76,20 +76,20 @@ fun Project.setupApp() {
     setupCore()
 
     android.apply {
-        defaultConfig.resourceConfigurations.addAll(listOf(
-            "ar",
-            "de",
-            "es",
-            "fa",
-            "fr",
-            "ja",
-            "ko",
-            "ru",
-            "tr",
-            "uk",
-            "zh-rCN",
-            "zh-rTW",
-        ))
+//        defaultConfig.resourceConfigurations.addAll(listOf(
+//            "ar",
+//            "de",
+//            "es",
+//            "fa",
+//            "fr",
+//            "ja",
+//            "ko",
+//            "ru",
+//            "tr",
+//            "uk",
+//            "zh-rCN",
+//            "zh-rTW",
+//        ))
         buildTypes {
             getByName("debug") {
                 isPseudoLocalesEnabled = true

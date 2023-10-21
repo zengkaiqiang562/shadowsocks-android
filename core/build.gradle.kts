@@ -21,17 +21,17 @@ android {
             arguments("-j${Runtime.getRuntime().availableProcessors()}")
         }
 
-        kapt.arguments {
-            arg("room.incremental", true)
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
+//        kapt.arguments {
+//            arg("room.incremental", true)
+//            arg("room.schemaLocation", "$projectDir/schemas")
+//        }
     }
 
     externalNativeBuild.ndkBuild.path("src/main/jni/Android.mk")
 
-    sourceSets.getByName("androidTest") {
-        assets.setSrcDirs(assets.srcDirs + files("$projectDir/schemas"))
-    }
+//    sourceSets.getByName("androidTest") {
+//        assets.setSrcDirs(assets.srcDirs + files("$projectDir/schemas"))
+//    }
 }
 
 cargo {
