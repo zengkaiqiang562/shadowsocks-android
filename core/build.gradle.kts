@@ -69,7 +69,7 @@ cargo {
     libname = "sslocal"
     targets = listOf("arm", "arm64", "x86", "x86_64")
 //    profile = findProperty("CARGO_PROFILE")?.toString() ?: currentFlavor
-    profile = "debug" // TODO 正式环境改成 "release"
+    profile = "release" // TODO 正式环境改成 "release"
     extraCargoBuildArguments = listOf("--bin", libname!!)
     featureSpec.noDefaultBut(arrayOf(
         "stream-cipher",
