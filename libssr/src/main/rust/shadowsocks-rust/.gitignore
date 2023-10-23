@@ -13,9 +13,3 @@
 /.idea
 /.devcontainer
 .DS_Store
-
-!/build/build-host-release
-!/build/build-host-release.ps1
-!/build/build-release
-!/build/build-release-zigbuild
-!/build/README.md

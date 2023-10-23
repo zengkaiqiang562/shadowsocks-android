@@ -12,3 +12,5 @@ release/
 # release apks
 *.apk
 .DS_Store
+
+!libssr/src/main/rust/shadowsocks-rust/build
